@@ -1,6 +1,7 @@
 import '../styles/App.css';
 import { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import { dark } from './Context/darkContext'
 
 import Navbar from "./Navbar/Navbar"
 import Home from "./Home/Home"
@@ -53,12 +54,33 @@ function App() {
     navigate('/');
   };
 
+  const [background, setBackground] = useState(false);
+
+  // funcion manejadroa del evento del checkbox
+  const handleClick = (ev) => {
+    setBackground(ev.target.checked);
+  };
+
   return (
     <div className="divFather">
-      <div className="App-img">
+     <form className={`dark-Mode ${background ? 'black' : 'orange'}`} action="">
+      <label>
+        <input
+          type="checkbox"
+          name="colorTheme"
+          onClick={handleClick}
+          checked={background}/>          
+          Presione este boton para el modo oscuro
+         </label>
+      </form>
+
+    <dark.Provider value={background}>
+    
+      <div className={`App-img ${background ? 'black' : 'orange'}`}
+>
         <img className="bigPeli" src={imgPelis} alt=""/>  
       </div>
-      <div className="App-header">     
+      <div className={`App-header ${background ? 'black' : 'orange'}`}>     
       <Navbar user={user} logoutUser={logoutUser} />    
       <Routes>
       <Route path="/" element={<Home />} />
@@ -69,7 +91,8 @@ function App() {
           />
       <Route path="/api" element={<Pelis />} />
       </Routes>
-      </div>    
+      </div> 
+      </dark.Provider>   
     </div>
   );
 }
